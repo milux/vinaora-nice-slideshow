@@ -27,7 +27,7 @@ class JFormFieldColorpicker extends JFormField
         $baseurl = JURI::base(true);
 		$baseurl = str_replace('administrator','',$baseurl);	
 		
-		$module = str_replace( JPATH_SITE.DS.'modules'.DS,'',dirname(__FILE__) );
+		$module = str_replace( JPATH_SITE.'/modules/','',dirname(__FILE__) );
 		$module = substr( $module, 0, strpos($module, DS) );
 		
 		// Initialize some field attributes.

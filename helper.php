@@ -66,7 +66,7 @@ class modVtNiceSlideshowHelper{
 	}
 
 	public static function makeConfig($params){
-		if ( file_exists($params->get('configPath').DS.$params->get('lastedit').'.log') ) return;
+		if ( file_exists($params->get('configPath').'/'.$params->get('lastedit').'.log') ) return;
 
 		// Remove old files
 		$files	= JFolder::files($params->get('configPath'), '.', false, true, array(), array('\.log$'));
@@ -74,7 +74,7 @@ class modVtNiceSlideshowHelper{
 		
 		// Make index.html
 		$str = '<!DOCTYPE html><title></title>';
-		JFile::write($params->get('configPath').DS.'index.html', $str);
+		JFile::write($params->get('configPath').'/index.html', $str);
 
 		self::_makeImages($params);
 		self::_makeCSS($params);
@@ -83,7 +83,7 @@ class modVtNiceSlideshowHelper{
 		// Make file log
 		$str = time()."\n";
 		$str .= var_export($params, true);
-		JFile::write( $params->get('configPath').DS.$params->get('lastedit').'.log', $str);
+		JFile::write( $params->get('configPath').'/'.$params->get('lastedit').'.log', $str);
 	}
 	
 	/*
@@ -92,20 +92,20 @@ class modVtNiceSlideshowHelper{
 	private static function _makeImages($params){
 	
 		// Check 'loading.gif' file exitst or not
-		if ( file_exists($params->get('configPath').DS.'loading.gif') ) return;
+		if ( file_exists($params->get('configPath').'/loading.gif') ) return;
 		
 		// Copy images for styles from 'Common' directory
 		$src	= JPath::clean(JPATH_BASE.'/media/mod_vt_nice_slideshow/templates/common');
 		$files	= JFolder::files($src, '[^\s]+(\.(?i)(jpg|png|gif|bmp))$', false, false);
 		foreach($files as $file){
-			JFile::copy($src.DS.$file, $params->get('configPath').DS.$file);
+			JFile::copy($src.'/'.$file, $params->get('configPath').'/'.$file);
 		}
 		
 		// Copy images for styles from 'Themes' directory
 		$src	= JPath::clean(JPATH_BASE.'/media/mod_vt_nice_slideshow/templates/backgnd/'.$params->get('theme'));
 		$files	= JFolder::files($src, '[^\s]+(\.(?i)(jpg|png|gif|bmp))$', false, false, array('thumbnail.png','.svn', 'CVS','.DS_Store','__MACOSX'));
 		foreach($files as $file){
-			JFile::copy($src.DS.$file, $params->get('configPath').DS.$file);
+			JFile::copy($src.'/'.$file, $params->get('configPath').'/'.$file);
 		}
 	}
 
@@ -115,50 +115,50 @@ class modVtNiceSlideshowHelper{
 	private static function _makeCSS($params){
 		
 		// Check CSS File exitst or not
-		if ( file_exists($params->get('configPath').DS.'style.css') ) return;
+		if ( file_exists($params->get('configPath').'/style.css') ) return;
 		
 		$css	= '';
 		
 		$path	= JPath::clean( JPATH_BASE.'/media/mod_vt_nice_slideshow/templates/common' );
 		
 		// Join Common Style
-		$file	= $path.DS.'common.css';
+		$file	= $path.'/common.css';
 		if( file_exists($file) ){
 			$css	.= file_get_contents( $file );
 		}
 		
-		$path	= JPath::clean( JPATH_BASE.'/media/mod_vt_nice_slideshow/templates/backgnd'.DS.$params->get('theme') );
+		$path	= JPath::clean( JPATH_BASE.'/media/mod_vt_nice_slideshow/templates/backgnd/'.$params->get('theme') );
 		
 		// Join Theme Style
-		$file	= $path.DS.'style.css';
+		$file	= $path.'/style.css';
 		if( file_exists($file) ){
 			$css	.= "\n/* Theme Style */\n";
 			$css	.= file_get_contents( $file );
 		}
 
 		// Join Tooltip Position Style
-		$file	= $path.DS.'style-'.$params->get('TooltipPos').'.css';
+		$file	= $path.'/style-'.$params->get('TooltipPos').'.css';
 		if( ($params->get('ShowTooltips') == 'true') && file_exists($file) ){
 			$css	.= "\n/* Controls Position Style */\n";
 			$css	.= file_get_contents( $file );
 		}
 		
 		// Join Tooltip Style
-		$file	= $path.DS.'style-tooltip.css';
+		$file	= $path.'/style-tooltip.css';
 		if( ($params->get('ShowTooltips') == 'true') && file_exists($file) ){
 			$css	.= "\n/* Tooltips Style */\n";
 			$css	.= file_get_contents( $file );
 		}
 		
 		// Join Shadow Style
-		$file	= $path.DS.'style-shadow.css';
+		$file	= $path.'/style-shadow.css';
 		if( ($params->get('noFrame') == 'false') && file_exists($file) ){
 			$css	.= "\n/* Shadow Style */\n";
 			$css	.= file_get_contents( $file );
 		}
 		
 		// Join Frame Style
-		$file	= $path.DS.'style-frame.css';
+		$file	= $path.'/style-frame.css';
 		if( ($params->get('noFrame') == 'false') && file_exists($file) ){
 			$css	.= "\n/* Frame Style */\n";
 			$css	.= file_get_contents( $file );
@@ -174,7 +174,7 @@ class modVtNiceSlideshowHelper{
 		$css 	.= "\n/* ".time()." */";
 
 		// Make file CSS
-		JFile::write( $params->get('configPath').DS.'style.css', $css);
+		JFile::write( $params->get('configPath').'/style.css', $css);
 	}
 
 	/*
@@ -183,7 +183,7 @@ class modVtNiceSlideshowHelper{
 	private static function _makeScript($params){
 
 		// Check 'script.js' file exitst or not
-		if ( file_exists($params->get('configPath').DS.'script.js') ) return;
+		if ( file_exists($params->get('configPath').'/script.js') ) return;
 		
 		$script = '';
 		$effect = $params->get('ImageEffect');
@@ -192,11 +192,11 @@ class modVtNiceSlideshowHelper{
 		$path	= JPath::clean( JPATH_BASE.'/media/mod_vt_nice_slideshow/templates/effects/'.$effect );
 		switch( $effect ){
 			case 'squares':
-				$script .= file_get_contents( $path.DS.'coin-slider.js' )."\n";
+				$script .= file_get_contents( $path.'/coin-slider.js' )."\n";
 				break;
 			
 			case 'flip':
-				$script .= file_get_contents( $path.DS.'jquery.2dtransform.js' )."\n";
+				$script .= file_get_contents( $path.'/jquery.2dtransform.js' )."\n";
 				break;
 			
 			default:
@@ -204,11 +204,11 @@ class modVtNiceSlideshowHelper{
 		}
 
 		// Join Main Image Effect Script
-		$script .= file_get_contents( $path.DS.'script.js' )."\n";
+		$script .= file_get_contents( $path.'/script.js' )."\n";
 		
 		// Join Slideshow Config Script
 		$path	= JPath::clean( JPATH_BASE.'/media/mod_vt_nice_slideshow/js' );
-		$start	= file_get_contents( $path.DS.'script_start.js' )."\n";
+		$start	= file_get_contents( $path.'/script_start.js' )."\n";
 		
 		// Replace Javascript variables
 		$start	= preg_replace( "/\\$(\w+)\\$/e", '$params->get("$1")', $start );
@@ -221,7 +221,7 @@ class modVtNiceSlideshowHelper{
 		$script .= "\n/* ".time()." */";
 		
 		// Make file Javascript
-		JFile::write( $params->get('configPath').DS.'script.js', $script);
+		JFile::write( $params->get('configPath').'/script.js', $script);
 	}
 	
 	/*
@@ -237,7 +237,7 @@ class modVtNiceSlideshowHelper{
 		JFolder::create($path);
 
 		$str = '<!DOCTYPE html><title></title>';
-		JFile::write($path.DS.'index.html', $str);
+		JFile::write($path.'/index.html', $str);
 
 		return true;
 	}
@@ -368,7 +368,7 @@ class modVtNiceSlideshowHelper{
 			$excludefilter = array();
 			// array_push($excludefilter, $params->get('controlNavThumbsReplace'));
 
-			$param	= JFolder::files(JPATH_BASE.DS.'images'.DS.$param, $filter, true, true, $exclude, $excludefilter);
+			$param	= JFolder::files(JPATH_BASE.'/images/'.$param, $filter, true, true, $exclude, $excludefilter);
 			foreach($param as $key=>$value){
 				$value = substr($value, strlen(JPATH_BASE.DS) - strlen($value));
 				$param[$key] = self::validPath($value);
@@ -400,7 +400,7 @@ class modVtNiceSlideshowHelper{
 
 		$path = JPath::clean($path, DS);
 		$path = ltrim($path, DS);
-		if (!is_file(JPATH_BASE.DS.$path)) return '';
+		if (!is_file(JPATH_BASE.'/'.$path)) return '';
 
 		// Convert it to url path
 		$path = JPath::clean(JURI::base(true).'/'.$path, '/');
