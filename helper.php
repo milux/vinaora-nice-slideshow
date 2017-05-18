@@ -41,11 +41,11 @@ class modVtNiceSlideshowHelper{
 		$param	= htmlspecialchars($params->get('nextCaption'), ENT_QUOTES);
 		$params->set('nextCaption', $param);
 		
-		$param	= (int) $params->get('ImageWidth');
+		$param	= $params->get('ImageWidth');
 		$param	= (!$param) ? '640' : $param;
 		$params->set('ImageWidth', $param);
 
-		$param	= (int) $params->get('ImageHeight');
+		$param	= $params->get('ImageHeight');
 		$param	= (!$param) ? '480' : $param;
 		$params->set('ImageHeight', $param);
 		
@@ -166,7 +166,9 @@ class modVtNiceSlideshowHelper{
 		
 		// Replace CSS variables
 		$css	= str_replace( '#wowslider-container1', '#wowslider-container$GallerySuffix$', $css );
-		$css	= preg_replace( "/\\$(\w+)\\$/e", '$params->get("$1")', $css );
+		$css	= preg_replace_callback( "/\\$(\w+?)\\$/", function ($match) use ($params) {
+			return $params->get($match[1]);
+		}, $css );
 		$css	= str_replace( '#wowslider-container', '#vt_nice_slideshow', $css );
 		
 		// Add Timestamp log
@@ -211,7 +213,9 @@ class modVtNiceSlideshowHelper{
 		$start	= file_get_contents( $path.'/script_start.js' )."\n";
 		
 		// Replace Javascript variables
-		$start	= preg_replace( "/\\$(\w+)\\$/e", '$params->get("$1")', $start );
+		$start  = preg_replace_callback( "/\\$(\w+?)\\$/", function ($match) use ($params) {
+			return $params->get($match[1]);
+		}, $start );
 		$start	= str_replace( '#wowslider-container', '#vt_nice_slideshow', $start );
 		
 		$script .= $start;
